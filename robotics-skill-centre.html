@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIKE Prime Python Essentials</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --accent-color: #3182ce;
+            --accent-bg: #f7fafc;
+            --chew-color: #10b981;
+            --bad-color: #ef4444;
+            --text-color: #2d3748;
+            --outline-color: #e2e8f0;
+            --border-radius: 12px;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition-time: 0.3s;
+            --code-bg: #2d3748;
+            --code-text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 0;
+        }
+
+        .main-content {
+            margin-left: 0;
+            width: 100%;
+        }
+
+        .hero-section {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+        }
+
+        .hero-title {
+            font-size: 3em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .light-section {
+            background: white;
+            border-radius: 20px;
+            margin: 0 20px;
+            padding: 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .skills-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .skill-card {
+            background: white;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+            transition: transform var(--transition-time), box-shadow var(--transition-time);
+            overflow: hidden;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .skill-header {
+            background: var(--accent-bg);
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--outline-color);
+            transition: background-color var(--transition-time);
+        }
+
+        .skill-header:hover {
+            background: #e9ecef;
+        }
+
+        .skill-header-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .skill-icon.blue { background: var(--accent-color); }
+        .skill-icon.green { background: var(--chew-color); }
+        .skill-icon.red { background: var(--bad-color); }
+        .skill-icon.yellow { background: #ffc107; }
+        .skill-icon.purple { background: #6f42c1; }
+        .skill-icon.orange { background: #fd7e14; }
+        .skill-icon.indigo { background: #6366f1; }
+        .skill-icon.pink { background: #ec4899; }
+        .skill-icon.teal { background: #14b8a6; }
+
+        .skill-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .toggle-arrow {
+            color: var(--accent-color);
+            font-size: 1.2em;
+            transition: transform var(--transition-time);
+        }
+
+        .toggle-arrow.rotate {
+            transform: rotate(180deg);
+        }
+
+        .skill-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: white;
+        }
+
+        .skill-content.active {
+            max-height: 3000px;
+            overflow: visible;
+        }
+
+        .skill-details {
+            padding: 25px;
+        }
+
+        .code-example {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-button:hover {
+            opacity: 1;
+        }
+
+        .info-box {
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid;
+        }
+
+        .info-box.tip {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--chew-color);
+        }
+
+        .info-box.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+        }
+
+        .info-box.usage {
+            background: rgba(49, 130, 206, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box.tip h4 { color: var(--chew-color); }
+        .info-box.warning h4 { color: #b8860b; }
+        .info-box.usage h4 { color: var(--accent-color); }
+
+        .search-container {
+            background: white;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1em;
+            transition: border-color var(--transition-time);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .filter-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .filter-pill {
+            padding: 10px 20px;
+            background: var(--accent-bg);
+            border: 2px solid var(--outline-color);
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all var(--transition-time);
+        }
+
+        .filter-pill:hover,
+        .filter-pill.active {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .element-header {
+            background: linear-gradient(135deg, var(--accent-color), #4299e1);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .element-number {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .hardware-note {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+            color: #6c757d;
+        }
+
+        .port-diagram {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        @media (max-width: 768px) {
+            .skills-container {
+                margin: 0 20px;
+                padding: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2em;
+            }
+            
+            .hero-stats {
+                gap: 20px;
+            }
+            
+            .search-container {
+                margin: 20px;
+            }
+            
+            .filter-pills {
+                justify-content: center;
+            }
+            
+            .skill-details {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="light-section">
+            <div class="skills-container">
+                
+                <!-- Search and Filter -->
+                <div class="search-container">
+                    <div class="element-header" style="margin: -25px -25px 20px -25px; padding: 20px 25px;">
+                        <div class="element-number">🔍</div>
+                        <h3>Find Your Skills <i class="fas fa-search" style="margin-left: 10px; color: rgba(255,255,255,0.8);"></i></h3>
+                    </div>
+                    
+                    <div style="position: relative;">
+                        <input type="text" id="skill-search" placeholder="Search skills..." class="search-input" style="padding-left: 50px;">
+                        <div style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #999;">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-pills">
+                        <button class="filter-pill active" data-category="all">All Skills</button>
+                        <button class="filter-pill" data-category="basics">Basics</button>
+                        <button class="filter-pill" data-category="movement">Movement</button>
+                        <button class="filter-pill" data-category="sensors">Sensors</button>
+                        <button class="filter-pill" data-category="display">Display & Sound</button>
+                        <button class="filter-pill" data-category="control">Control Flow</button>
+                    </div>
+                </div>
+                
+                <!-- Skills List -->
+                <div id="skills-container">
+                    
+                    <!-- Getting Started -->
+                    <div class="skill-card" data-category="basics">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon blue">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <h3 class="skill-title">Getting Started</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Learn the basic structure of a SPIKE Prime Python program and write your first "Hello, World!" example.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Basic Program Structure:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre># Import required modules
+from hub import light_matrix
+
+# Simple program to display text
+light_matrix.write('Hello, World!')</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Using Async Functions (Recommended):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import runloop
+from hub import light_matrix
+
+async def main():
+    light_matrix.write('Hello from async!')
+    # Add more code here
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Why use async?</h4>
+                                    <p style="margin: 0;">Async functions allow multiple operations to run at the same time, like moving a motor while checking sensors. This is essential for responsive robot behaviour.</p>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Always use the async structure for any program that controls motors or reads sensors. It makes your robot much more responsive and professional.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Moving Forward -->
+                    <div class="skill-card" data-category="movement">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon green">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <h3 class="skill-title">Moving Forward</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Control a single motor or create coordinated movement using motor pairs for driving forward.</p>
+                                
+                                <div class="hardware-note">
+                                    <strong>Hardware needed:</strong> Connect motors to ports A and B for a basic drivetrain
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Single Motor Control:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import motor
+import runloop
+from hub import port
+
+async def main():
+    # Run motor for 360 degrees (1 rotation) at 720 degrees/sec
+    await motor.run_for_degrees(port.A, 360, 720)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Motor Pair for Driving:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    # Pair motors on ports A and B
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    # Move straight forward for 1000ms at 360 degrees/sec
+    await motor_pair.move_for_time(motor_pair.PAIR_1, 1000, 0, velocity=360)
+    
+    # Move forward for specific distance (degrees)
+    await motor_pair.move_for_degrees(motor_pair.PAIR_1, 720, 0, velocity=360)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Motor Parameters:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>degrees:</strong> How far to move (360 = one full rotation)</li>
+                                        <li><strong>velocity:</strong> Speed in degrees per second (360 = slow, 1000 = fast)</li>
+                                        <li><strong>steering:</strong> Direction (-100 = left, 0 = straight, 100 = right)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Use <code>await</code> before motor commands to wait for completion, or omit it to start the action and immediately move to the next line.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Turning and Steering -->
+                    <div class="skill-card" data-category="movement">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon orange">
+                                    <i class="fas fa-undo"></i>
+                                </div>
+                                <h3 class="skill-title">Turning & Steering</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Make your robot turn, pivot, and steer with precision using motor pairs and tank control.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Steering with Motor Pairs:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    # Turn right while moving forward
+    await motor_pair.move_for_time(motor_pair.PAIR_1, 1000, 50, velocity=360)
+    
+    # Turn left while moving forward  
+    await motor_pair.move_for_time(motor_pair.PAIR_1, 1000, -50, velocity=360)
+    
+    # Sharp right turn (pivot)
+    await motor_pair.move_for_time(motor_pair.PAIR_1, 500, 100, velocity=360)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Tank Control (Individual Motor Speeds):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    # Move straight (both motors same speed)
+    await motor_pair.move_tank_for_time(motor_pair.PAIR_1, 500, 500, 1000)
+    
+    # Turn right (left motor faster)
+    await motor_pair.move_tank_for_time(motor_pair.PAIR_1, 800, 200, 1000)
+    
+    # Spin in place (motors opposite directions)
+    await motor_pair.move_tank_for_time(motor_pair.PAIR_1, 500, -500, 1000)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Steering Values:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>-100:</strong> Sharp left turn</li>
+                                        <li><strong>-50:</strong> Gentle left curve</li>
+                                        <li><strong>0:</strong> Straight forward</li>
+                                        <li><strong>50:</strong> Gentle right curve</li>
+                                        <li><strong>100:</strong> Sharp right turn</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Use tank control for precise movements and steering for smooth curves. Experiment with different values to find what works best for your robot!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Using the Color Sensor -->
+                    <div class="skill-card" data-category="sensors">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon purple">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <h3 class="skill-title">Using the Colour Sensor</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Detect colours and light intensity to make your robot respond to its environment.</p>
+                                
+                                <div class="hardware-note">
+                                    <strong>Hardware needed:</strong> Connect Colour Sensor to any port (A-F)
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Basic Colour Detection:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import color_sensor
+import color
+import runloop
+from hub import port
+
+async def main():
+    while True:
+        detected_color = color_sensor.color(port.A)
+        
+        if detected_color == color.RED:
+            print("Red detected!")
+        elif detected_color == color.BLUE:
+            print("Blue detected!")
+        elif detected_color == color.GREEN:
+            print("Green detected!")
+        else:
+            print("Unknown color")
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Light Intensity (Reflection):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import color_sensor
+import runloop
+from hub import port
+
+async def main():
+    while True:
+        # Get light reflection (0-100%)
+        reflection = color_sensor.reflection(port.A)
+        print("Light reflection:", reflection, "%")
+        
+        if reflection > 70:
+            print("Very bright surface")
+        elif reflection < 30:
+            print("Dark surface")
+        else:
+            print("Medium brightness")
+            
+        await runloop.sleep_ms(200)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Detected Colours:</h4>
+                                    <p style="margin: 0;">The sensor can detect: Red, Green, Blue, Yellow, Magenta, Orange, Azure, Black, White, and Unknown</p>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">For line following, use reflection values rather than colours. Dark lines typically have reflection values below 30%.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Using the Distance Sensor -->
+                    <div class="skill-card" data-category="sensors">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon teal">
+                                    <i class="fas fa-ruler-horizontal"></i>
+                                </div>
+                                <h3 class="skill-title">Using the Distance Sensor</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Measure distances and create light displays with the ultrasonic Distance Sensor.</p>
+                                
+                                <div class="hardware-note">
+                                    <strong>Hardware needed:</strong> Connect Distance Sensor to any port (A-F)
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Measuring Distance:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import distance_sensor
+import runloop
+from hub import port
+
+async def main():
+    while True:
+        # Get distance in millimeters
+        distance = distance_sensor.distance(port.A)
+        
+        if distance == -1:
+            print("No object detected")
+        else:
+            print("Distance:", distance, "mm")
+            
+        if distance < 100 and distance > 0:
+            print("Object very close!")
+        elif distance < 300 and distance > 0:
+            print("Object nearby")
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Obstacle Avoidance:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import distance_sensor
+import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    while True:
+        distance = distance_sensor.distance(port.C)
+        
+        if distance < 200 and distance > 0:
+            # Obstacle detected - turn right
+            await motor_pair.move_for_time(motor_pair.PAIR_1, 500, 100, velocity=360)
+        else:
+            # No obstacle - move forward
+            motor_pair.move(motor_pair.PAIR_1, 0, velocity=360)
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Distance Range:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>Range:</strong> 30mm to 2500mm (3cm to 2.5m)</li>
+                                        <li><strong>Returns -1:</strong> When no object is detected</li>
+                                        <li><strong>Works best:</strong> With flat, solid surfaces</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Always check if the distance is greater than 0 before using the value. A return of -1 means no valid reading.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Using the Force Sensor -->
+                    <div class="skill-card" data-category="sensors">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon red">
+                                    <i class="fas fa-hand-paper"></i>
+                                </div>
+                                <h3 class="skill-title">Using the Force Sensor</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Detect touch, pressure, and force to create interactive robot behaviours.</p>
+                                
+                                <div class="hardware-note">
+                                    <strong>Hardware needed:</strong> Connect Force Sensor to any port (A-F)
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Detecting Button Press:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import force_sensor
+import runloop
+from hub import port, light_matrix
+
+async def main():
+    while True:
+        if force_sensor.pressed(port.A):
+            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+            print("Force sensor pressed!")
+        else:
+            light_matrix.show_image(light_matrix.IMAGE_ASLEEP)
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Measuring Force Amount:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import force_sensor
+import motor
+import runloop
+from hub import port
+
+async def main():
+    while True:
+        # Get force in decinewtons (0-100)
+        force = force_sensor.force(port.A)
+        print("Force:", force, "dN")
+        
+        # Use force to control motor speed
+        # Multiply by 10 to get good motor speeds
+        motor_speed = force * 10
+        
+        if motor_speed > 50:
+            motor.run(port.B, motor_speed)
+        else:
+            motor.stop(port.B)
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Force Values:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>Range:</strong> 0-100 decinewtons (dN)</li>
+                                        <li><strong>Pressed:</strong> Returns True/False for any pressure</li>
+                                        <li><strong>Light touch:</strong> ~10-20 dN</li>
+                                        <li><strong>Firm press:</strong> ~50-80 dN</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Use <code>pressed()</code> for simple button detection, and <code>force()</code> when you need to know how hard something is being pressed.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Light Matrix Display -->
+                    <div class="skill-card" data-category="display">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon yellow">
+                                    <i class="fas fa-th"></i>
+                                </div>
+                                <h3 class="skill-title">Light Matrix Display</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Show text, images, and custom patterns on the 5x5 LED matrix display.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Displaying Text:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import light_matrix
+import runloop
+
+async def main():
+    # Show scrolling text
+    await light_matrix.write("Hello World!")
+    
+    # Show text with custom timing
+    await light_matrix.write("SPIKE", time_per_character=800)
+    
+    # Show text with custom brightness
+    await light_matrix.write("Bright!", intensity=100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Built-in Images:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import light_matrix
+import runloop
+import time
+
+async def main():
+    # Show different emotions
+    light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+    time.sleep_ms(1000)
+    
+    light_matrix.show_image(light_matrix.IMAGE_SAD)
+    time.sleep_ms(1000)
+    
+    light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+    time.sleep_ms(1000)
+    
+    # Show arrows for directions
+    light_matrix.show_image(light_matrix.IMAGE_ARROW_N)  # North
+    time.sleep_ms(1000)
+    
+    light_matrix.show_image(light_matrix.IMAGE_GO_RIGHT)
+    time.sleep_ms(1000)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Custom Pixel Patterns:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import light_matrix
+import runloop
+
+async def main():
+    # Create custom pattern (25 values for 5x5 grid)
+    # 0 = off, 100 = full brightness
+    smiley_pattern = [
+        0,  100, 0,  100, 0,   # Eyes
+        0,  0,   0,  0,   0,   # 
+        100,0,   0,  0,   100, # Smile corners
+        0,  100, 100,100, 0,   # Smile
+        0,  0,   0,  0,   0    # 
+    ]
+    
+    light_matrix.show(smiley_pattern)
+    await runloop.sleep_ms(2000)
+    
+    # Individual pixel control
+    light_matrix.clear()
+    light_matrix.set_pixel(2, 2, 100)  # Center pixel (x, y, brightness)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Popular Images:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>Emotions:</strong> IMAGE_HAPPY, IMAGE_SAD, IMAGE_ANGRY</li>
+                                        <li><strong>Arrows:</strong> IMAGE_ARROW_N, IMAGE_GO_LEFT, IMAGE_GO_RIGHT</li>
+                                        <li><strong>Symbols:</strong> IMAGE_HEART, IMAGE_YES, IMAGE_NO</li>
+                                        <li><strong>Numbers:</strong> IMAGE_CLOCK1 to IMAGE_CLOCK12</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Use <code>await</code> with <code>write()</code> to wait for text to finish scrolling. For images, no await is needed unless you want to control timing.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Playing Sounds -->
+                    <div class="skill-card" data-category="display">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon pink">
+                                    <i class="fas fa-volume-up"></i>
+                                </div>
+                                <h3 class="skill-title">Playing Sounds</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Create beeps, tones, and sound effects to give your robot audio feedback.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Basic Beeps:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import sound
+import runloop
+
+async def main():
+    # Simple beep (440Hz for 500ms at volume 100)
+    await sound.beep(440, 500, 100)
+    
+    # High pitch beep
+    await sound.beep(880, 300, 100)
+    
+    # Low pitch beep
+    await sound.beep(220, 800, 100)
+    
+    # Very short beep for button feedback
+    await sound.beep(600, 100, 80)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Sound with Sensor Feedback:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import distance_sensor
+from hub import sound, port
+import runloop
+
+async def main():
+    while True:
+        distance = distance_sensor.distance(port.A)
+        
+        if distance > 0 and distance < 300:
+            # Higher pitch for closer objects
+            frequency = 2000 - (distance * 5)  # Closer = higher pitch
+            await sound.beep(frequency, 100, 50)
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Musical Sequences:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import sound
+import runloop
+
+async def main():
+    # Musical notes (approximate frequencies)
+    C4 = 262
+    D4 = 294
+    E4 = 330
+    F4 = 349
+    G4 = 392
+    
+    # Play a simple melody
+    notes = [C4, D4, E4, F4, G4]
+    
+    for note in notes:
+        await sound.beep(note, 400, 80)
+        await runloop.sleep_ms(100)  # Short pause between notes
+    
+    # Success sound
+    await sound.beep(G4, 200, 100)
+    await sound.beep(C4*2, 400, 100)  # Octave higher
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Sound Parameters:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>Frequency:</strong> 200-2000 Hz (higher = more high-pitched)</li>
+                                        <li><strong>Duration:</strong> Time in milliseconds</li>
+                                        <li><strong>Volume:</strong> 0-100 (0 = silent, 100 = loudest)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Use different pitches for different robot states: high pitch for success, low pitch for errors, ascending notes for startup!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Using Hub Buttons -->
+                    <div class="skill-card" data-category="sensors">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon indigo">
+                                    <i class="fas fa-hand-pointer"></i>
+                                </div>
+                                <h3 class="skill-title">Using Hub Buttons</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Use the left and right buttons on the hub for user input and program control.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Basic Button Detection:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import button, light_matrix
+import runloop
+
+async def main():
+    while True:
+        if button.pressed(button.LEFT):
+            light_matrix.show_image(light_matrix.IMAGE_ARROW_W)
+            print("Left button pressed!")
+            
+        elif button.pressed(button.RIGHT):
+            light_matrix.show_image(light_matrix.IMAGE_ARROW_E)
+            print("Right button pressed!")
+            
+        else:
+            light_matrix.show_image(light_matrix.IMAGE_ASLEEP)
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Button-Controlled Robot:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import button
+import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    while True:
+        if button.pressed(button.LEFT):
+            # Turn left
+            motor_pair.move(motor_pair.PAIR_1, -50, velocity=360)
+            
+        elif button.pressed(button.RIGHT):
+            # Turn right
+            motor_pair.move(motor_pair.PAIR_1, 50, velocity=360)
+            
+        else:
+            # Stop
+            motor_pair.stop(motor_pair.PAIR_1)
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Menu System with Buttons:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import button, light_matrix, sound
+import runloop
+
+async def main():
+    menu_option = 1
+    max_options = 3
+    
+    while True:
+        # Show current menu option
+        if menu_option == 1:
+            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+        elif menu_option == 2:
+            light_matrix.show_image(light_matrix.IMAGE_HEART)
+        elif menu_option == 3:
+            light_matrix.show_image(light_matrix.IMAGE_YES)
+        
+        # Check buttons
+        if button.pressed(button.LEFT):
+            menu_option = menu_option - 1
+            if menu_option < 1:
+                menu_option = max_options
+            await sound.beep(400, 100, 50)
+            await runloop.sleep_ms(300)  # Prevent rapid scrolling
+            
+        elif button.pressed(button.RIGHT):
+            menu_option = menu_option + 1
+            if menu_option > max_options:
+                menu_option = 1
+            await sound.beep(600, 100, 50)
+            await runloop.sleep_ms(300)  # Prevent rapid scrolling
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Button Functions:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>button.LEFT:</strong> Left button (next to power button)</li>
+                                        <li><strong>button.RIGHT:</strong> Right button (next to power button)</li>
+                                        <li><strong>pressed():</strong> Returns duration in milliseconds (0 = not pressed)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Add a small delay after detecting button presses to prevent rapid repeated triggers. Use different beep tones for button feedback!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Loops and Repetition -->
+                    <div class="skill-card" data-category="control">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon green">
+                                    <i class="fas fa-redo"></i>
+                                </div>
+                                <h3 class="skill-title">Loops & Repetition</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Use loops to repeat actions and create continuous robot behaviours.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Forever Loop (while True):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import light_matrix
+import runloop
+import random
+
+async def main():
+    # This loop runs forever
+    while True:
+        # Show random emotion
+        emotions = [
+            light_matrix.IMAGE_HAPPY,
+            light_matrix.IMAGE_SAD,
+            light_matrix.IMAGE_SILLY,
+            light_matrix.IMAGE_SURPRISED
+        ]
+        
+        random_emotion = random.choice(emotions)
+        light_matrix.show_image(random_emotion)
+        
+        await runloop.sleep_ms(1000)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Counting Loop (for loop):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>from hub import sound, light_matrix
+import runloop
+
+async def main():
+    # Countdown from 5 to 1
+    for count in range(5, 0, -1):
+        light_matrix.write(str(count))
+        await sound.beep(500, 300, 80)
+        await runloop.sleep_ms(500)
+    
+    # Blast off!
+    light_matrix.write("GO!")
+    await sound.beep(800, 1000, 100)
+    
+    # Repeat an action 3 times
+    for i in range(3):
+        light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+        await runloop.sleep_ms(300)
+        light_matrix.clear()
+        await runloop.sleep_ms(300)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Conditional Loop (while with condition):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import distance_sensor
+import motor_pair
+import runloop
+from hub import port
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    # Move forward until obstacle is detected
+    while True:
+        distance = distance_sensor.distance(port.C)
+        
+        # Continue while no obstacle (distance > 200mm or -1)
+        if distance > 200 or distance == -1:
+            motor_pair.move(motor_pair.PAIR_1, 0, velocity=300)
+        else:
+            # Stop when obstacle detected
+            motor_pair.stop(motor_pair.PAIR_1)
+            break  # Exit the loop
+            
+        await runloop.sleep_ms(50)
+    
+    print("Obstacle detected! Stopped.")
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Loop Types:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>while True:</strong> Runs forever (most common)</li>
+                                        <li><strong>for i in range(5):</strong> Runs 5 times (0,1,2,3,4)</li>
+                                        <li><strong>while condition:</strong> Runs while condition is true</li>
+                                        <li><strong>break:</strong> Exits a loop early</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Always include <code>await runloop.sleep_ms()</code> in loops to prevent the program from running too fast and allow other tasks to run.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- If Statements and Conditions -->
+                    <div class="skill-card" data-category="control">
+                        <div class="skill-header">
+                            <div class="skill-header-content">
+                                <div class="skill-icon orange">
+                                    <i class="fas fa-code-branch"></i>
+                                </div>
+                                <h3 class="skill-title">If Statements & Conditions</h3>
+                            </div>
+                            <i class="fas fa-chevron-down toggle-arrow"></i>
+                        </div>
+                        <div class="skill-content">
+                            <div class="skill-details">
+                                <p>Make decisions in your code using if, elif, and else statements to create smart robot behaviours.</p>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Basic If Statement:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import color_sensor
+import color
+from hub import light_matrix, port
+import runloop
+
+async def main():
+    while True:
+        detected_color = color_sensor.color(port.A)
+        
+        if detected_color == color.RED:
+            light_matrix.show_image(light_matrix.IMAGE_ANGRY)
+        elif detected_color == color.GREEN:
+            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+        elif detected_color == color.BLUE:
+            light_matrix.show_image(light_matrix.IMAGE_SAD)
+        else:
+            light_matrix.show_image(light_matrix.IMAGE_CONFUSED)
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Multiple Conditions (and, or):</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import distance_sensor
+import force_sensor
+from hub import light_matrix, sound, port
+import runloop
+
+async def main():
+    while True:
+        distance = distance_sensor.distance(port.A)
+        force_pressed = force_sensor.pressed(port.B)
+        
+        # Multiple conditions with 'and'
+        if distance < 100 and distance > 0 and force_pressed:
+            light_matrix.show_image(light_matrix.IMAGE_SURPRISED)
+            await sound.beep(800, 200, 100)
+            
+        # Multiple conditions with 'or'
+        elif distance < 50 or force_pressed:
+            light_matrix.show_image(light_matrix.IMAGE_HAPPY)
+            
+        # Range checking
+        elif distance >= 100 and distance <= 300:
+            light_matrix.show_image(light_matrix.IMAGE_ARROW_N)
+            
+        else:
+            light_matrix.clear()
+            
+        await runloop.sleep_ms(100)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <h4 style="color: var(--accent-color); margin: 20px 0 10px 0;">Smart Robot Behaviour:</h4>
+                                
+                                <div class="code-example">
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+<pre>import color_sensor
+import distance_sensor
+import color
+import motor_pair
+from hub import port
+import runloop
+
+async def main():
+    motor_pair.pair(motor_pair.PAIR_1, port.A, port.B)
+    
+    while True:
+        line_color = color_sensor.color(port.C)
+        obstacle_distance = distance_sensor.distance(port.D)
+        
+        # Priority 1: Avoid obstacles
+        if obstacle_distance < 150 and obstacle_distance > 0:
+            motor_pair.move(motor_pair.PAIR_1, 100, velocity=200)  # Turn right
+            
+        # Priority 2: Follow red line
+        elif line_color == color.RED:
+            motor_pair.move(motor_pair.PAIR_1, 0, velocity=300)    # Go straight
+            
+        # Priority 3: Search for line
+        elif line_color == color.BLACK or line_color == color.UNKNOWN:
+            motor_pair.move(motor_pair.PAIR_1, -30, velocity=200)  # Turn left slowly
+            
+        # Default: Stop
+        else:
+            motor_pair.stop(motor_pair.PAIR_1)
+            
+        await runloop.sleep_ms(50)
+
+runloop.run(main())</pre>
+                                </div>
+                                
+                                <div class="info-box usage">
+                                    <h4><i class="fas fa-lightbulb"></i> Comparison Operators:</h4>
+                                    <ul style="margin: 0; padding-left: 20px;">
+                                        <li><strong>==</strong> Equal to</li>
+                                        <li><strong>!=</strong> Not equal to</li>
+                                        <li><strong>&lt;</strong> Less than</li>
+                                        <li><strong>&gt;</strong> Greater than</li>
+                                        <li><strong>&lt;=</strong> Less than or equal</li>
+                                        <li><strong>&gt;=</strong> Greater than or equal</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="info-box tip">
+                                    <h4><i class="fas fa-star"></i> Pro Tip:</h4>
+                                    <p style="margin: 0;">Put the most important conditions first! In robotics, obstacle avoidance usually comes before other behaviours to keep your robot safe.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show/hide skill content
+            const skillHeaders = document.querySelectorAll('.skill-header');
+            
+            skillHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const arrow = this.querySelector('.toggle-arrow');
+                    
+                    if (content.classList.contains('active')) {
+                        content.classList.remove('active');
+                        arrow.classList.remove('rotate');
+                    } else {
+                        content.classList.add('active');
+                        arrow.classList.add('rotate');
+                    }
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('skill-search');
+            const skillCards = document.querySelectorAll('.skill-card');
+            
+            searchInput.addEventListener('input', function() {
+                const searchText = this.value.toLowerCase();
+                
+                skillCards.forEach(card => {
+                    const title = card.querySelector('.skill-title').textContent.toLowerCase();
+                    const content = card.querySelector('.skill-details').textContent.toLowerCase();
+                    
+                    if (title.includes(searchText) || content.includes(searchText)) {
+                        card.style.display = 'block';
+                        
+                        // Open the card if it contains the search text and search is not empty
+                        if (searchText.trim() !== '') {
+                            const content = card.querySelector('.skill-content');
+                            const arrow = card.querySelector('.toggle-arrow');
+                            
+                            if (!content.classList.contains('active')) {
+                                content.classList.add('active');
+                                arrow.classList.add('rotate');
+                            }
+                        }
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Category filter functionality
+            const categoryButtons = document.querySelectorAll('.filter-pill');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const category = this.dataset.category;
+                    
+                    // Show/hide cards
+                    skillCards.forEach(card => {
+                        if (category === 'all' || card.dataset.category === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+        
+        // Copy code function
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(function() {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            }).catch(function() {
+                button.textContent = 'Copy failed';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
