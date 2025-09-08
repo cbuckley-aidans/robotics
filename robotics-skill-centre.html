@@ -5,95 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SPIKE Prime Python Essentials</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="CSS/styles.css">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/3.19.3/inter.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root {
-            --accent-color: #3182ce;
-            --accent-bg: #f7fafc;
-            --chew-color: #10b981;
-            --bad-color: #ef4444;
-            --text-color: #2d3748;
-            --outline-color: #e2e8f0;
-            --border-radius: 12px;
-            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --transition-time: 0.3s;
-            --code-bg: #2d3748;
-            --code-text: #e2e8f0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px 0;
-        }
-
+        /* Override main-content to remove sidebar space */
         .main-content {
             margin-left: 0;
             width: 100%;
         }
-
-        .hero-section {
-            text-align: center;
+        
+        /* Floating home button */
+        .floating-home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--accent-color);
             color: white;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-        }
-
-        .hero-title {
-            font-size: 3em;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .hero-subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .hero-stats {
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            padding: 12px 20px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform var(--transition-time), box-shadow var(--transition-time);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            z-index: 999;
         }
-
-        .stat-item {
-            text-align: center;
+        
+        .floating-home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: 700;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        .light-section {
-            background: white;
-            border-radius: 20px;
-            margin: 0 20px;
-            padding: 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
+        
+        /* Single column layout for skills */
         .skills-container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 40px;
         }
-
+        
         .skill-card {
             background: white;
             border: 2px solid var(--outline-color);
@@ -103,12 +60,12 @@
             transition: transform var(--transition-time), box-shadow var(--transition-time);
             overflow: hidden;
         }
-
+        
         .skill-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
-
+        
         .skill-header {
             background: var(--accent-bg);
             padding: 20px 25px;
@@ -119,17 +76,17 @@
             border-bottom: 2px solid var(--outline-color);
             transition: background-color var(--transition-time);
         }
-
+        
         .skill-header:hover {
             background: #e9ecef;
         }
-
+        
         .skill-header-content {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
+        
         .skill-icon {
             width: 50px;
             height: 50px;
@@ -140,8 +97,8 @@
             font-size: 1.5em;
             color: white;
         }
-
-        .skill-icon.blue { background: var(--accent-color); }
+        
+        .skill-icon.blue { background: var(--chunk-color); }
         .skill-icon.green { background: var(--chew-color); }
         .skill-icon.red { background: var(--bad-color); }
         .skill-icon.yellow { background: #ffc107; }
@@ -150,38 +107,375 @@
         .skill-icon.indigo { background: #6366f1; }
         .skill-icon.pink { background: #ec4899; }
         .skill-icon.teal { background: #14b8a6; }
-
+        .skill-icon.emerald { background: #059669; }
+        
         .skill-title {
             font-size: 1.4em;
             font-weight: 700;
             color: var(--text-color);
             margin: 0;
         }
-
+        
         .toggle-arrow {
             color: var(--accent-color);
             font-size: 1.2em;
             transition: transform var(--transition-time);
         }
-
+        
         .toggle-arrow.rotate {
             transform: rotate(180deg);
         }
-
+        
         .skill-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease;
             background: white;
         }
-
+        
         .skill-content.active {
             max-height: 3000px;
             overflow: visible;
         }
-
+        
         .skill-details {
             padding: 25px;
+        }
+        
+        /* Video container styling */
+        .video-container {
+            position: relative;
+            padding-bottom: 42%;
+            width: 85%;
+            margin: 20px auto;
+            height: 0;
+            overflow: hidden;
+            background-color: #1a202c;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--outline-color);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: calc(var(--border-radius) - 2px);
+            object-fit: contain;
+        }
+        
+        /* Example code styling */
+        .example-code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        /* Info boxes */
+        .info-box {
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid;
+        }
+        
+        .info-box.tip {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--chew-color);
+        }
+        
+        .info-box.warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+        }
+        
+        .info-box.usage {
+            background: rgba(0, 38, 84, 0.05);
+            border-color: var(--accent-color);
+        }
+        
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-box.tip h4 { color: var(--chew-color); }
+        .info-box.warning h4 { color: #b8860b; }
+        .info-box.usage h4 { color: var(--accent-color); }
+        
+        /* Excel table styling */
+        .excel-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: white;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .excel-grid th {
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            position: relative;
+        }
+        
+        .excel-grid td {
+            border: 1px solid #d0d7de;
+            padding: 12px;
+            background: white;
+        }
+        
+        .excel-grid tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        /* Search and filter styling */
+        .search-container {
+            background: white;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1em;
+            transition: border-color var(--transition-time);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
+        .filter-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .filter-pill {
+            padding: 10px 20px;
+            background: var(--accent-bg);
+            border: 2px solid var(--outline-color);
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all var(--transition-time);
+        }
+        
+        .filter-pill:hover,
+        .filter-pill.active {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Interactive buttons */
+        .excel-button {
+            background: var(--accent-color);
+            color: white;
+            border: 2px solid var(--outline-color);
+            border-radius: var(--border-radius);
+            padding: 8px 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-time);
+            box-shadow: var(--shadow-sm);
+            margin: 2px;
+            font-size: 0.9em;
+        }
+        
+        .excel-button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .excel-button.active {
+            background: var(--chew-color);
+        }
+        
+        /* Search highlight */
+        .search-highlight {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+        
+        /* Simulation containers */
+        .simulation-container {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .simulation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .simulation-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin: 0;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .skills-container {
+                margin: 0 20px;
+            }
+            
+            .floating-home-button {
+                position: relative;
+                margin: 20px;
+            }
+            
+            .search-container {
+                margin: 20px;
+            }
+            
+            .filter-pills {
+                justify-content: center;
+            }
+            
+            .skill-details {
+                padding: 20px;
+            }
+        }
+
+        /* Additional styles for interactive elements */
+        .toggle-arrow.rotate-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .excel-input {
+            background-color: #4a5568;
+            border: 1px solid #2d3748;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px;
+            width: 80px;
+        }
+        
+        .excel-tabs {
+            display: flex;
+            background-color: #1a202c;
+            border-bottom: 1px solid #4a5568;
+            padding: 4px 0 0 4px;
+        }
+        
+        .excel-tab {
+            padding: 6px 12px;
+            background-color: #2d3748;
+            border: 1px solid #4a5568;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 2px;
+            cursor: pointer;
+            position: relative;
+            bottom: -1px;
+        }
+        
+        .excel-tab.active {
+            background-color: #3182ce;
+            color: white;
+        }
+        
+        .excel-sheet {
+            padding: 10px;
+            border: 1px solid #4a5568;
+            border-top: none;
+        }
+        
+        .filtered-row {
+            animation: highlightRow 1s ease-in-out;
+        }
+        
+        @keyframes highlightRow {
+            0% { background-color: #3182ce; }
+            100% { background-color: inherit; }
+        }
+        
+        .chart-container {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding-top: 20px;
+        }
+        
+        .chart-bar {
+            background-color: #3182ce;
+            width: 30px;
+            transition: height 0.5s ease;
+            position: relative;
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .chart-bar:before {
+            content: attr(data-value);
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+        }
+        
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        
+        .sheet-tab {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            transition: all 0.2s;
+        }
+        
+        .sheet-tab.active {
+            background: var(--accent-color);
+            color: white;
         }
 
         .code-example {
@@ -217,113 +511,6 @@
             opacity: 1;
         }
 
-        .info-box {
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 20px 0;
-            border: 2px solid;
-        }
-
-        .info-box.tip {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: var(--chew-color);
-        }
-
-        .info-box.warning {
-            background: rgba(255, 193, 7, 0.1);
-            border-color: #ffc107;
-        }
-
-        .info-box.usage {
-            background: rgba(49, 130, 206, 0.1);
-            border-color: var(--accent-color);
-        }
-
-        .info-box h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-box.tip h4 { color: var(--chew-color); }
-        .info-box.warning h4 { color: #b8860b; }
-        .info-box.usage h4 { color: var(--accent-color); }
-
-        .search-container {
-            background: white;
-            border: 2px solid var(--outline-color);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            margin: 30px 0;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e9ecef;
-            border-radius: var(--border-radius);
-            font-family: 'Inter', sans-serif;
-            font-size: 1.1em;
-            transition: border-color var(--transition-time);
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .filter-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-        .filter-pill {
-            padding: 10px 20px;
-            background: var(--accent-bg);
-            border: 2px solid var(--outline-color);
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all var(--transition-time);
-        }
-
-        .filter-pill:hover,
-        .filter-pill.active {
-            background: var(--accent-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .element-header {
-            background: linear-gradient(135deg, var(--accent-color), #4299e1);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 20px 25px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .element-number {
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2em;
-        }
-
         .hardware-note {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
@@ -344,37 +531,9 @@
             border-radius: 8px;
             font-family: monospace;
         }
-
-        @media (max-width: 768px) {
-            .skills-container {
-                margin: 0 20px;
-                padding: 20px;
-            }
-            
-            .hero-title {
-                font-size: 2em;
-            }
-            
-            .hero-stats {
-                gap: 20px;
-            }
-            
-            .search-container {
-                margin: 20px;
-            }
-            
-            .filter-pills {
-                justify-content: center;
-            }
-            
-            .skill-details {
-                padding: 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
     
 
     <!-- Main Content -->
